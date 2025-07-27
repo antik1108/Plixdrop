@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Plixdrop - Mousepad E-commerce Website
+
+A modern, responsive e-commerce website for premium mousepads built with Next.js 15, React 19, and Tailwind CSS.
+
+## Features
+
+### ✅ Working Functionality
+- **Product Catalog**: Browse mousepads with filtering, sorting, and search
+- **Shopping Cart**: Add/remove items, update quantities, persistent cart state
+- **Product Details**: Individual product pages with add to cart functionality
+- **Checkout Process**: Complete checkout flow with order confirmation
+- **Responsive Design**: Mobile-first design with dark theme
+- **Cart Context**: Global state management for cart functionality
+
+### 🎨 Design Features
+- Dark theme with lime green accents
+- Smooth animations and transitions
+- Modern UI with hover effects
+- Responsive grid layouts
+- Professional typography
+
+## Fixed Issues
+
+### Cart Functionality
+- ✅ Integrated CartContext properly across all pages
+- ✅ Fixed add to cart functionality on products page
+- ✅ Added quantity selection on product detail pages
+- ✅ Implemented cart persistence and state management
+- ✅ Added cart clearing after successful checkout
+
+### UI/UX Improvements
+- ✅ Fixed CartItem component styling to match dark theme
+- ✅ Updated product images to use proper URLs
+- ✅ Added success feedback for cart interactions
+- ✅ Improved product detail page layout and functionality
+- ✅ Added proper navigation between pages
+
+### Technical Fixes
+- ✅ Removed conflicting local cart state
+- ✅ Added helper functions for cart calculations
+- ✅ Fixed product routing and links
+- ✅ Added proper error handling for missing products
+- ✅ Implemented proper form handling in checkout
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js app router pages
+│   ├── products/          # Product catalog and detail pages
+│   ├── cart/              # Shopping cart page
+│   ├── checkout/          # Checkout process
+│   └── layout.js          # Root layout with CartProvider
+├── components/            # Reusable React components
+│   ├── CartContext.jsx    # Global cart state management
+│   ├── CartItem.jsx       # Individual cart item component
+│   ├── Navbar.jsx         # Navigation with cart indicator
+│   └── ProductCard.jsx    # Product display component
+└── data/                  # Static data
+    └── products.js        # Product catalog data
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Components
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### CartContext
+- Global state management for shopping cart
+- Functions: `addToCart`, `removeFromCart`, `updateQuantity`, `getTotal`, `getItemCount`, `clearCart`
+- Persistent across page navigation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Product Pages
+- **Products Page**: Grid layout with filtering, sorting, and search
+- **Product Detail**: Individual product view with quantity selection
+- **Add to Cart**: Real-time feedback and cart updates
 
-## Learn More
+### Cart & Checkout
+- **Cart Page**: Item management with quantity controls
+- **Checkout**: Order summary and shipping information
+- **Order Confirmation**: Success page with order details
 
-To learn more about Next.js, take a look at the following resources:
+## Technologies Used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js 15** - React framework with app router
+- **React 19** - UI library
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **Lucide React** - Icon library
+- **JavaScript** - Programming language
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Browser Support
 
-## Deploy on Vercel
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application uses:
+- **Turbopack** for fast development builds
+- **ESLint** for code quality
+- **PostCSS** for CSS processing
+- **Tailwind CSS** for styling
+
+## License
+
+This project is for demonstration purposes.
