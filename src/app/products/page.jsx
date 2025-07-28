@@ -383,24 +383,6 @@ export default function ProductsPage() {
                   ))}
                 </div>
               </div>
-
-              {/* Features */}
-              <div>
-                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">FEATURES</h3>
-                <div className="space-y-3">
-                  {['Water Resistant', 'Anti-Slip Base', 'Machine Washable', 'RGB Lighting'].map((feature) => (
-                    <label key={feature} className="flex items-center gap-3 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 rounded border-gray-600 bg-transparent checked:bg-[#dfe31d] checked:border-[#dfe31d] focus:ring-0 focus:ring-offset-0"
-                      />
-                      <span className="text-gray-400 group-hover:text-white transition-colors">
-                        {feature}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
             </aside>
 
             {/* Product Grid */}
