@@ -5,11 +5,13 @@ import Footer from '../../components/Footer.jsx';
 import CartItem from '../../components/CartItem.jsx';
 import { useCart } from '../../components/CartContext.jsx';
 import { ShoppingCart, CreditCard, ArrowLeft, Package } from 'lucide-react';
+import { formatINR, convertUSDToINR } from '../../lib/currency.js';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getTotal, getItemCount } = useCart();
   const total = getTotal();
   const itemCount = getItemCount();
+  const freeShippingThreshold = convertUSDToINR(50); // $50 USD = ₹1125 INR
 
   return (
     <div className="flex flex-col min-h-screen bg-[#080808]">
@@ -17,17 +19,17 @@ export default function CartPage() {
       <main className="flex-1">
         {/* Header */}
         <div className="bg-[#18181c] border-b border-[#18181c]">
-          <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-5xl font-bold text-white mb-2">YOUR CART</h1>
+                <h1 className="text-2xl font-bold text-white mb-2">YOUR CART</h1>
                 <p className="text-gray-400">
                   {itemCount} {itemCount === 1 ? 'item' : 'items'} in your cart
                 </p>
               </div>
               <div className="hidden lg:flex items-center gap-2">
                 <Package className="w-6 h-6 text-[#dfe31d]" />
-                <span className="text-white">Free shipping on orders over $50</span>
+                <span className="text-white">Free shipping on orders over {formatINR(freeShippingThreshold)}</span>
               </div>
             </div>
           </div>
@@ -88,7 +90,7 @@ export default function CartPage() {
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between text-gray-400">
                       <span>Subtotal</span>
-                      <span>${total.toFixed(2)}</span>
+                      <span>{formatINR(total)}</span>
                     </div>
                     <div className="flex justify-between text-gray-400">
                       <span>Shipping</span>
@@ -103,7 +105,7 @@ export default function CartPage() {
                   <div className="border-t border-[#080808] pt-4 mb-6">
                     <div className="flex justify-between items-center">
                       <span className="text-xl font-bold text-white">Total</span>
-                      <span className="text-2xl font-bold text-[#dfe31d]">${total.toFixed(2)}</span>
+                      <span className="text-2xl font-bold text-[#dfe31d]">{formatINR(total)}</span>
                     </div>
                   </div>
 

@@ -4,14 +4,15 @@ import Navbar from '../../components/Navbar.jsx';
 import Footer from '../../components/Footer.jsx';
 import { useCart } from '../../components/CartContext.jsx';
 import { Search, Filter, X, ChevronDown, Grid3X3, Grid2X2, ShoppingCart, Check } from 'lucide-react';
+import { formatINR, convertUSDToINR } from '../../lib/currency.js';
 
-// Demo products data
+// Demo products data with INR pricing
 const demoProducts = [
   {
     id: 1,
     name: 'Stealth Black Pro',
-    price: 49.99,
-    originalPrice: 59.99,
+    price: 1125, // 49.99 USD * 22.5 = 1124.78 ≈ 1125 INR
+    originalPrice: 1350, // 59.99 USD * 22.5 = 1349.78 ≈ 1350 INR
     image: 'https://images.unsplash.com/photo-1631281956016-3cdc1b2fe5fb?w=800&h=800&fit=crop',
     category: 'gaming',
     rating: 5,
@@ -21,7 +22,7 @@ const demoProducts = [
   {
     id: 2,
     name: 'Minimal Code White',
-    price: 34.99,
+    price: 787, // 34.99 USD * 22.5 = 787.28 ≈ 787 INR
     image: 'https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=800&h=800&fit=crop',
     category: 'coding',
     rating: 5,
@@ -31,7 +32,7 @@ const demoProducts = [
   {
     id: 3,
     name: 'Sunset Gradient Wave',
-    price: 42.99,
+    price: 967, // 42.99 USD * 22.5 = 967.28 ≈ 967 INR
     image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=800&fit=crop',
     category: 'aesthetic',
     rating: 4.5,
@@ -41,7 +42,7 @@ const demoProducts = [
   {
     id: 4,
     name: 'RGB Gaming Elite',
-    price: 79.99,
+    price: 1800, // 79.99 USD * 22.5 = 1799.78 ≈ 1800 INR
     image: 'https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?w=800&h=800&fit=crop',
     category: 'gaming',
     rating: 5,
@@ -50,7 +51,7 @@ const demoProducts = [
   {
     id: 5,
     name: 'Ocean Blue Minimal',
-    price: 39.99,
+    price: 900, // 39.99 USD * 22.5 = 899.78 ≈ 900 INR
     image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop',
     category: 'aesthetic',
     rating: 4.8,
@@ -59,7 +60,7 @@ const demoProducts = [
   {
     id: 6,
     name: 'Carbon Fiber Pro',
-    price: 54.99,
+    price: 1237, // 54.99 USD * 22.5 = 1237.28 ≈ 1237 INR
     image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=800&h=800&fit=crop',
     category: 'gaming',
     rating: 5,
@@ -68,7 +69,7 @@ const demoProducts = [
   {
     id: 7,
     name: 'Zen Garden Desk Mat',
-    price: 44.99,
+    price: 1012, // 44.99 USD * 22.5 = 1012.28 ≈ 1012 INR
     image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop',
     category: 'aesthetic',
     rating: 4.7,
@@ -77,7 +78,7 @@ const demoProducts = [
   {
     id: 8,
     name: 'Developer Dark Mode',
-    price: 36.99,
+    price: 832, // 36.99 USD * 22.5 = 832.28 ≈ 832 INR
     image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=800&h=800&fit=crop',
     category: 'coding',
     rating: 5,
@@ -86,8 +87,8 @@ const demoProducts = [
   {
     id: 9,
     name: 'Neon Cyber Grid',
-    price: 59.99,
-    originalPrice: 69.99,
+    price: 1350, // 59.99 USD * 22.5 = 1349.78 ≈ 1350 INR
+    originalPrice: 1575, // 69.99 USD * 22.5 = 1574.78 ≈ 1575 INR
     image: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=800&h=800&fit=crop',
     category: 'gaming',
     rating: 4.9,
@@ -118,7 +119,7 @@ export default function ProductsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('featured');
   const [gridView, setGridView] = useState(3);
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [priceRange, setPriceRange] = useState([0, 2250]); // Updated to INR range (0-2250 INR)
   const [addedToCart, setAddedToCart] = useState({});
 
   const filteredProducts = demoProducts
@@ -169,80 +170,159 @@ export default function ProductsPage() {
       <main className="flex-1">
         {/* Header */}
         <div className="bg-[#18181c] border-b border-[#18181c]">
-          <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-5xl font-bold text-white mb-2">PRODUCTS</h1>
-                <p className="text-gray-400">{filteredProducts.length} items available</p>
+                <h1 className="text-2xl font-bold text-white mb-2">ALL PRODUCTS</h1>
+                <p className="text-gray-400">
+                  {filteredProducts.length} of {demoProducts.length} products
+                </p>
               </div>
-              
-              {/* Grid View Toggle - Desktop */}
-              <div className="hidden lg:flex items-center gap-2 bg-[#080808] rounded-lg p-1">
-                <button
-                  onClick={() => setGridView(2)}
-                  className={`p-2 rounded ${gridView === 2 ? 'bg-[#dfe31d] text-[#080808]' : 'text-gray-400 hover:text-white'}`}
-                >
-                  <Grid2X2 className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => setGridView(3)}
-                  className={`p-2 rounded ${gridView === 3 ? 'bg-[#dfe31d] text-[#080808]' : 'text-gray-400 hover:text-white'}`}
-                >
-                  <Grid3X3 className="w-5 h-5" />
-                </button>
+              <div className="hidden lg:flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Grid3X3 
+                    className={`w-5 h-5 cursor-pointer transition-colors ${gridView === 3 ? 'text-[#dfe31d]' : 'text-gray-500'}`}
+                    onClick={() => setGridView(3)}
+                  />
+                  <Grid2X2 
+                    className={`w-5 h-5 cursor-pointer transition-colors ${gridView === 2 ? 'text-[#dfe31d]' : 'text-gray-500'}`}
+                    onClick={() => setGridView(2)}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-8">
-          {/* Search and Sort Bar */}
+          {/* Search and Filters */}
           <div className="flex flex-col lg:flex-row gap-4 mb-8">
             {/* Search */}
             <div className="flex-1 relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
               <input
                 type="text"
-                placeholder="Search mousepads..."
+                placeholder="Search products..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-[#18181c] border border-transparent rounded-full pl-12 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#dfe31d] transition-all duration-200"
+                className="w-full bg-[#18181c] border border-transparent rounded-lg pl-12 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#dfe31d] transition-all duration-200"
               />
-              {search && (
-                <button
-                  onClick={() => setSearch('')}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-white"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
             </div>
 
-            {/* Sort Dropdown */}
+            {/* Category Filter */}
+            <div className="relative">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="bg-[#18181c] border border-transparent rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#dfe31d] transition-all duration-200 appearance-none pr-10"
+              >
+                <option value="">All Categories</option>
+                {categories.slice(1).map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label} ({cat.count})
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+
+            {/* Sort */}
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none bg-[#18181c] text-white px-6 py-3 pr-12 rounded-full focus:outline-none focus:border-[#dfe31d] border border-transparent transition-all duration-200 cursor-pointer"
+                className="bg-[#18181c] border border-transparent rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#dfe31d] transition-all duration-200 appearance-none pr-10"
               >
-                {sortOptions.map(option => (
+                {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            {/* Mobile Filter Toggle */}
+            {/* Mobile Filter Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden flex items-center justify-center gap-2 bg-[#18181c] text-white px-6 py-3 rounded-full"
+              className="lg:hidden bg-[#18181c] border border-transparent rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#dfe31d] transition-all duration-200 flex items-center gap-2"
             >
               <Filter className="w-5 h-5" />
               Filters
             </button>
           </div>
+
+          {/* Mobile Filters */}
+          {showFilters && (
+            <div className="lg:hidden bg-[#18181c] rounded-lg p-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-white font-bold">Filters</h3>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="text-gray-500 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              {/* Price Range */}
+              <div>
+                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">PRICE RANGE</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-gray-400">
+                    <span>{formatINR(priceRange[0])}</span>
+                    <span>{formatINR(priceRange[1])}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="2250"
+                    value={priceRange[1]}
+                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                    className="w-full accent-[#dfe31d]"
+                  />
+                </div>
+              </div>
+
+              {/* Size Filter */}
+              <div>
+                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">SIZE</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {['S', 'M', 'L', 'XL'].map((size) => (
+                    <button
+                      key={size}
+                      className="px-4 py-2 border border-[#18181c] rounded-lg text-gray-400 hover:border-[#dfe31d] hover:text-[#dfe31d] transition-all duration-200"
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Features */}
+              <div>
+                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">FEATURES</h3>
+                <div className="space-y-2">
+                  {['Anti-slip', 'Waterproof', 'RGB', 'Wireless'].map((feature) => (
+                    <label key={feature} className="flex items-center gap-2 text-gray-400">
+                      <input type="checkbox" className="accent-[#dfe31d]" />
+                      {feature}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Apply Filters Button */}
+              <div className="pt-4">
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="w-full bg-[#dfe31d] text-[#080808] py-4 rounded-full font-bold hover:bg-[#dfe31d]/90 transition-colors"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="flex gap-8">
             {/* Sidebar Filters - Desktop */}
@@ -275,13 +355,13 @@ export default function ProductsPage() {
                 <h3 className="text-white font-bold text-sm mb-4 tracking-wider">PRICE RANGE</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between text-gray-400">
-                    <span>${priceRange[0]}</span>
-                    <span>${priceRange[1]}</span>
+                    <span>{formatINR(priceRange[0])}</span>
+                    <span>{formatINR(priceRange[1])}</span>
                   </div>
                   <input
                     type="range"
                     min="0"
-                    max="100"
+                    max="2250"
                     value={priceRange[1]}
                     onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                     className="w-full accent-[#dfe31d]"
@@ -325,26 +405,25 @@ export default function ProductsPage() {
 
             {/* Product Grid */}
             <div className="flex-1">
-              <div className={`grid grid-cols-1 md:grid-cols-2 ${gridView === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-6`}>
+              <div className={`grid gap-6 ${
+                gridView === 3 
+                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' 
+                  : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+              }`}>
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="group">
                     <a href={`/products/${product.id}`} className="block">
-                      <div className="relative aspect-square bg-[#18181c] rounded-2xl overflow-hidden mb-4">
-                        {product.badge && (
-                          <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold z-10                           ${
-                            product.badge === 'SALE' ? 'bg-[#dfe31d] text-[#080808]' :
-                            product.badge === 'NEW' ? 'bg-white text-[#080808]' :
-                            'bg-[#dfe31d] text-[#080808]'
-                          }`}>
-                            {product.badge}
-                          </div>
-                        )}
-                        <img
-                          src={product.image}
+                      <div className="aspect-square bg-[#18181c] rounded-lg overflow-hidden mb-4 relative">
+                        <img 
+                          src={product.image} 
                           alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        {product.badge && (
+                          <span className="absolute top-3 left-3 bg-[#dfe31d] text-[#080808] text-xs font-bold px-2 py-1 rounded-full">
+                            {product.badge}
+                          </span>
+                        )}
                       </div>
                       
                       <div>
@@ -368,9 +447,9 @@ export default function ProductsPage() {
                         </div>
                         
                         <div className="flex items-center gap-2 mb-4">
-                          <span className="text-2xl font-bold text-white">${product.price}</span>
+                          <span className="text-2xl font-bold text-white">{formatINR(product.price)}</span>
                           {product.originalPrice && (
-                            <span className="text-gray-500 line-through text-lg">${product.originalPrice}</span>
+                            <span className="text-gray-500 line-through text-lg">{formatINR(product.originalPrice)}</span>
                           )}
                         </div>
                       </div>
@@ -379,9 +458,9 @@ export default function ProductsPage() {
                     {/* Add to Cart Button */}
                     <button
                       onClick={(e) => handleAddToCart(e, product)}
-                      className={`w-full py-3 rounded-full font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                      className={`w-full py-3 rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
                         addedToCart[product.id]
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-black text-white border border-white'
                           : 'bg-[#dfe31d] text-[#080808] hover:bg-[#dfe31d]/90'
                       }`}
                     >
@@ -401,103 +480,29 @@ export default function ProductsPage() {
                 ))}
               </div>
 
-              {/* Load More */}
-              <div className="mt-12 text-center">
-                <button className="bg-[#18181c] text-white px-8 py-3 rounded-full font-medium hover:bg-[#dfe31d] hover:text-[#080808] transition-all duration-200">
-                  Load More Products
-                </button>
-              </div>
+              {/* No Results */}
+              {filteredProducts.length === 0 && (
+                <div className="text-center py-20">
+                  <div className="bg-[#18181c] w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Search className="w-12 h-12 text-gray-600" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">No products found</h2>
+                  <p className="text-gray-400 mb-8">Try adjusting your search or filter criteria</p>
+                  <button
+                    onClick={() => {
+                      setSearch('');
+                      setCategory('');
+                      setPriceRange([0, 2250]);
+                    }}
+                    className="bg-[#dfe31d] text-[#080808] px-8 py-3 rounded-full font-bold hover:bg-[#dfe31d]/90 transition-all duration-200"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
-
-        {/* Mobile Filters Modal */}
-        {showFilters && (
-          <div className="lg:hidden fixed inset-0 bg-[#080808] z-50 overflow-y-auto">
-            <div className="sticky top-0 bg-[#080808] border-b border-[#18181c] p-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-white">FILTERS</h2>
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="p-2 hover:bg-[#18181c] rounded-lg transition-colors"
-                >
-                  <X className="w-6 h-6 text-white" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-4 space-y-8">
-              {/* Categories */}
-              <div>
-                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">CATEGORIES</h3>
-                <div className="space-y-1">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.value}
-                      onClick={() => {
-                        setCategory(cat.value);
-                      }}
-                      className={`group flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all duration-200 ${
-                        category === cat.value
-                          ? 'bg-[#dfe31d] text-[#080808]'
-                          : 'text-gray-400 hover:text-white hover:bg-[#18181c]'
-                      }`}
-                    >
-                      <span className="font-medium">{cat.label}</span>
-                      <span className={`text-sm ${category === cat.value ? 'text-[#080808]/70' : 'text-gray-500'}`}>
-                        {cat.count}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">PRICE RANGE</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between text-gray-400">
-                    <span>${priceRange[0]}</span>
-                    <span>${priceRange[1]}</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                    className="w-full accent-[#dfe31d]"
-                  />
-                </div>
-              </div>
-
-              {/* Size Filter */}
-              <div>
-                <h3 className="text-white font-bold text-sm mb-4 tracking-wider">SIZE</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {['S', 'M', 'L', 'XL'].map((size) => (
-                    <button
-                      key={size}
-                      className="px-4 py-2 border border-[#18181c] rounded-lg text-gray-400 hover:border-[#dfe31d] hover:text-[#dfe31d] transition-all duration-200"
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Apply Filters Button */}
-              <div className="pt-4">
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="w-full bg-[#dfe31d] text-[#080808] py-4 rounded-full font-bold hover:bg-[#dfe31d]/90 transition-colors"
-                >
-                  Apply Filters
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
       <Footer />
     </div>

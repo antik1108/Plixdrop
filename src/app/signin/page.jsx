@@ -1,14 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Navbar from '../../components/Navbar.jsx';
 import Footer from '../../components/Footer.jsx';
+import { useAuth } from '../../components/AuthContext.jsx';
 import { LogIn, UserPlus, Mail, Lock, ArrowRight } from 'lucide-react';
 
 export default function SignInPage() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const { signIn, signInWithGoogle } = useAuth();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,11 +22,39 @@ export default function SignInPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError('');
+    
+    try {
+      const { error } = await signIn(form.email, form.password);
+      if (error) {
+        setError(error.message);
+      } else {
+        setSubmitted(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
       setIsLoading(false);
-      setSubmitted(true);
-    }, 1000);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (submitted) {
@@ -63,6 +96,13 @@ export default function SignInPage() {
           {/* Form Container */}
           <div className="bg-[#18181c] rounded-2xl p-8 shadow-2xl border border-[#18181c]">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+              
               {/* Email Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -139,13 +179,14 @@ export default function SignInPage() {
 
             {/* Social Login Options */}
             <div className="space-y-3">
-              <button className="w-full bg-[#080808] border border-gray-800 rounded-lg py-3 px-4 text-white hover:border-gray-700 transition-all duration-200 flex items-center justify-center gap-3">
+              <button 
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+                className="w-full bg-[#080808] border border-gray-800 rounded-lg py-3 px-4 text-white hover:border-gray-700 transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
                 Continue with Google
-              </button>
-              <button className="w-full bg-[#080808] border border-gray-800 rounded-lg py-3 px-4 text-white hover:border-gray-700 transition-all duration-200 flex items-center justify-center gap-3">
-                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5" />
-                Continue with Facebook
               </button>
             </div>
           </div>

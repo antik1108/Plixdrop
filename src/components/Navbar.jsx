@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from './CartContext.jsx';
-import { ShoppingCart, User, Search, Menu, X, Zap, Phone, Info, ArrowRight } from 'lucide-react';
+import { useAuth } from './AuthContext.jsx';
+import { ShoppingCart, User, Search, Menu, X, Zap, Phone, Info, ArrowRight, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const { cart, getItemCount } = useCart();
+  const { user, signOut } = useAuth();
   const cartCount = getItemCount();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -177,12 +179,34 @@ const Navbar = () => {
               </Link>
 
               {/* User - Desktop */}
-              <Link 
-                href="/signin" 
-                className="hidden sm:block p-3 rounded-lg border border-[#18181c] text-[#a0a0a0] hover:text-white hover:border-[#a0a0a0]/30 transition-all duration-300"
-              >
-                <User className="w-5 h-5" />
-              </Link>
+              {user ? (
+                <div className="hidden sm:flex items-center gap-2">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-[#18181c] rounded-lg border border-[#18181c]">
+                    <div className="w-6 h-6 bg-[#dfe31d] rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-[#080808]">
+                        {user.email?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <span className="text-sm text-white font-medium truncate max-w-24">
+                      {user.user_metadata?.full_name || user.email}
+                    </span>
+                  </div>
+                  <button
+                    onClick={signOut}
+                    className="p-3 rounded-lg border border-[#18181c] text-[#a0a0a0] hover:text-white hover:border-[#a0a0a0]/30 transition-all duration-300"
+                    title="Sign Out"
+                  >
+                    <LogOut className="w-5 h-5" />
+                  </button>
+                </div>
+              ) : (
+                <Link 
+                  href="/signin" 
+                  className="hidden sm:block p-3 rounded-lg border border-[#18181c] text-[#a0a0a0] hover:text-white hover:border-[#a0a0a0]/30 transition-all duration-300"
+                >
+                  <User className="w-5 h-5" />
+                </Link>
+              )}
               
               {/* Mobile Menu Toggle */}
               <button
@@ -269,14 +293,42 @@ const Navbar = () => {
 
             {/* User Actions - Mobile */}
             <div className="space-y-4">
-              <Link
-                href="/signin"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-3 p-4 bg-[#18181c] rounded-lg text-white hover:bg-[#18181c]/80 transition-all duration-300"
-              >
-                <User className="w-5 h-5 text-[#a0a0a0]" />
-                <span className="font-medium">Account</span>
-              </Link>
+              {user ? (
+                <>
+                  <div className="flex items-center gap-3 p-4 bg-[#18181c] rounded-lg">
+                    <div className="w-8 h-8 bg-[#dfe31d] rounded-full flex items-center justify-center">
+                      <span className="text-sm font-bold text-[#080808]">
+                        {user.email?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">
+                        {user.user_metadata?.full_name || user.email}
+                      </p>
+                      <p className="text-xs text-[#a0a0a0]">Signed in</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center gap-3 p-4 bg-[#18181c] rounded-lg text-white hover:bg-[#18181c]/80 transition-all duration-300 w-full"
+                  >
+                    <LogOut className="w-5 h-5 text-[#a0a0a0]" />
+                    <span className="font-medium">Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/signin"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 p-4 bg-[#18181c] rounded-lg text-white hover:bg-[#18181c]/80 transition-all duration-300"
+                >
+                  <User className="w-5 h-5 text-[#a0a0a0]" />
+                  <span className="font-medium">Account</span>
+                </Link>
+              )}
 
               {/* CTA Button */}
               <Link
