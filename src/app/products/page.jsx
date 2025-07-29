@@ -10,7 +10,7 @@ import { formatINR, convertUSDToINR } from '../../lib/currency.js';
 const demoProducts = [
   {
     id: 1,
-    name: 'Stealth Black Pro',
+    name: 'Total gaming',
     price: 1125, // 49.99 USD * 22.5 = 1124.78 ≈ 1125 INR
     originalPrice: 1350, // 59.99 USD * 22.5 = 1349.78 ≈ 1350 INR
     image: 'https://images.unsplash.com/photo-1631281956016-3cdc1b2fe5fb?w=800&h=800&fit=crop',
@@ -21,7 +21,7 @@ const demoProducts = [
   },
   {
     id: 2,
-    name: 'Minimal Code White',
+    name: 'Git',
     price: 787, // 34.99 USD * 22.5 = 787.28 ≈ 787 INR
     image: 'https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=800&h=800&fit=crop',
     category: 'coding',
@@ -41,7 +41,7 @@ const demoProducts = [
   },
   {
     id: 4,
-    name: 'RGB Gaming Elite',
+    name: 'Alspart 8',
     price: 1800, // 79.99 USD * 22.5 = 1799.78 ≈ 1800 INR
     image: 'https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?w=800&h=800&fit=crop',
     category: 'gaming',
@@ -59,7 +59,7 @@ const demoProducts = [
   },
   {
     id: 6,
-    name: 'Carbon Fiber Pro',
+    name: 'COD',
     price: 1237, // 54.99 USD * 22.5 = 1237.28 ≈ 1237 INR
     image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=800&h=800&fit=crop',
     category: 'gaming',
@@ -77,7 +77,7 @@ const demoProducts = [
   },
   {
     id: 8,
-    name: 'Developer Dark Mode',
+    name: 'Python',
     price: 832, // 36.99 USD * 22.5 = 832.28 ≈ 832 INR
     image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=800&h=800&fit=crop',
     category: 'coding',
@@ -86,7 +86,7 @@ const demoProducts = [
   },
   {
     id: 9,
-    name: 'Neon Cyber Grid',
+    name: 'COC',
     price: 1350, // 59.99 USD * 22.5 = 1349.78 ≈ 1350 INR
     originalPrice: 1575, // 69.99 USD * 22.5 = 1574.78 ≈ 1575 INR
     image: 'https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=800&h=800&fit=crop',

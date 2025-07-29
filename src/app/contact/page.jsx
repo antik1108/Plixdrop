@@ -22,20 +22,20 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email",
-      content: "hello@plixdrop.com",
+      content: "itsantikmondal143@gmail.com",
       subtext: "We'll respond within 24 hours"
     },
     {
       icon: Phone,
       title: "Phone",
-      content: "+1 (555) 123-4567",
-      subtext: "Mon-Fri 9AM-6PM EST"
+      content: "+91 8101108711",
+      subtext: "Mon-Fri 9AM-6PM"
     },
     {
       icon: MapPin,
       title: "Office",
-      content: "123 Tech Street",
-      subtext: "San Francisco, CA 94105"
+      content: "NST",
+      subtext: "Sonipat"
     }
   ];
 
